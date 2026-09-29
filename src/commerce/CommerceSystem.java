@@ -10,7 +10,7 @@ public class CommerceSystem {
 
 
     // 생성자
-    CommerceSystem(List<Category> categoryList) {
+    public CommerceSystem(List<Category> categoryList) {
         this.categoryList = categoryList;
     }
 
@@ -28,23 +28,13 @@ public class CommerceSystem {
             System.out.print("입력 👉 ");
 
             int inputNumber = sc.nextInt();
-
-            switch (inputNumber) {
-
-                case 1:
-                    showCategoryProducts(categoryList.get(0));
-                    break;
-                case 2:
-                    showCategoryProducts(categoryList.get(1));
-                    break;
-                case 3:
-                    showCategoryProducts(categoryList.get(2));
-                    break;
-                case 0:
-                    System.out.println("프로그램 종료🛑");
-                    return;
-                default:
-                    System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
+            if (inputNumber == 0) {
+                System.out.println("프로그램 종료🛑");
+                return;
+            } else if (inputNumber > 0 && inputNumber <= categoryList.size()) {
+                showCategoryProducts(categoryList.get(inputNumber - 1));
+            } else {
+                System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
             }
         }
 
@@ -73,7 +63,7 @@ public class CommerceSystem {
             return;
         } else if (choice > 0 && choice <= products.size()) {
             System.out.printf("선택한 상품: %s | %,d원 | %s | 재고: %d개\n",
-                    products.get(choice-1).getProductName(),products.get(choice-1).getPrice(), products.get(choice-1).getExplanation(), products.get(choice-1).getStockQuantity());
+                    products.get(choice - 1).getProductName(), products.get(choice - 1).getPrice(), products.get(choice - 1).getExplanation(), products.get(choice - 1).getStockQuantity());
         } else {
             System.out.println("잘못된 상품 번호입니다.🛑");
         }
