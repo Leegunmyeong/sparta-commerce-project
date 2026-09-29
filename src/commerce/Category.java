@@ -11,7 +11,7 @@ public class Category {
 
 
     // 생성자
-    Category(String categoryName, List<Product> productList) {
+    public Category(String categoryName, List<Product> productList) {
         this.categoryName = categoryName;
         this.productList = productList;
     }
