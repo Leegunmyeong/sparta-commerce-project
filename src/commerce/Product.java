@@ -14,7 +14,7 @@ public class Product {
 
 
     // 생성자
-    Product(String productName, int price, String explanation, int stockQuantity) {
+    public Product(String productName, int price, String explanation, int stockQuantity) {
         this.productName = productName;
         this.price = price;
         this.explanation = explanation;
