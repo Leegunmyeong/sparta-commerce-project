@@ -38,11 +38,5 @@ public class Main {
         CommerceSystem system = new CommerceSystem(categories);
         system.start();
 
-
-
-
-
-
-
     }
 }
