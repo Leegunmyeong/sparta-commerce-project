@@ -10,6 +10,8 @@ public class CommerceSystem {
     // 속성
     private List<Category> categoryList;
     private Scanner sc = new Scanner(System.in);
+    private Category selectCategory;
+    private Product selectProduct;
 
 
     // 생성자
@@ -17,7 +19,9 @@ public class CommerceSystem {
         this.categoryList = categoryList;
     }
 
+
     //기능
+    /*  1단계 = */
 
     public void start() {
         while (true) {
@@ -25,62 +29,72 @@ public class CommerceSystem {
             showCategory();
 
             // 2단계 카테고리 입력받기
-            System.out.print("입력 👉 ");
-            int inputNumber = sc.nextInt();
+            int inputNumber = enterNumber();
 
-            // 3단계. 0이면 프로그램 바로 종료
-            if (inputNumber == 0) {
-                System.out.println("프로그램 종료🛑");
-                return; // start()메서드를 종료
+            // 3단계 입력 받은 카테고리 번호 값 결과 처리
+            String getCategoryValue = processCategorySelection(inputNumber);
+
+            // 프로그램 종료
+            if (getCategoryValue.equals("exit")) {
+                break;
             }
-
-            // 3.1 입력 값 유효성 검사
-            if (!validateChoice(inputNumber, categoryList.size())) {
+            // 잘못 입력 할 경우
+            if (getCategoryValue.equals("wrong")) {
                 continue;
             }
 
-            // 올바른 카테고리 번호 입력 시 실행
-            Category selectCategory = categoryList.get(inputNumber - 1);
-            List<Product> productList = selectCategory.getProductList();
+            // 제대로 입력 했을 때 4단계로 넘어감
 
-            // 3단계(true) 선택한 카테고리 상품 목록 출력
-            showProduct(selectCategory);
+            // 4단계 상품 목록 출력
+            showProduct();
 
-            // 4단계 상품 번호 입력받기
-            System.out.print("입력 👉 ");
-            int inputNumber2 = sc.nextInt();
+            // 5단계 상품 번호 입력받기
+            int inputNumber2 = enterNumber();
+            // 6단계 입력 받은 상품 번호 값 결과 처리
+            String getProductValue = processProductSelection(inputNumber2);
 
-            // 5.1 뒤로 돌아가기
-            if (inputNumber2 == 0) {
-                System.out.println("메인 화면으로 돌아갑니다");
+            // 뒤로가기
+            if (getProductValue.equals("back")) {
+                break;
+            }
+            //잘못 입력 할 경우
+            if (getProductValue.equals("wrong")) {
                 continue;
             }
-            // 5.2 유효성 검사
-            if (!validateChoice(inputNumber2, productList.size())) {
-                continue;
+
+            // 올라른 번호 입력한 경우
+            if (getProductValue.equals("product")) {
+                System.out.printf("선택한 상품: %s | %,d원 | %s | 재고: %d개\n",
+                        selectProduct.getProductName(),
+                        selectProduct.getPrice(),
+                        selectProduct.getExplanation(),
+                        selectProduct.getStockQuantity()
+                );
             }
-            // 5.3 올바른 상품번호 입력 시 실행
-            Product selectProduct = productList.get(inputNumber2 - 1);
-            System.out.printf("선택한 상품: %s | %,d원 | %s | 재고: %d개\n", selectProduct.getProductName(), selectProduct.getPrice(), selectProduct.getExplanation(), selectProduct.getStockQuantity());
+
         } // while문 끝
     }
 
 
-    //카테고리 목록 출력 메서드
+    // 기능
+
+    // 카테고리 목록 출력 메서드
     public void showCategory() {
         System.out.println("[ 실시간 커머스 플랫폼 메인 ]");
         for (int i = 0; i < categoryList.size(); i++) {
-            System.out.printf("%d. %s\n", (i + 1), categoryList.get(i).getCategoryName());
+            System.out.printf("%d. %s\n", (
+                            i + 1),
+                    categoryList.get(i).getCategoryName());
         }
         System.out.printf("0. %-6s | %s\n", "종료", "프로그램 종료");
     }
 
 
-    // 선택한 카테고리 상품 목록 출력 메서드
-    public void showProduct(Category category) {
-        List<Product> productList = category.getProductList();
+    // 상품 목록 출력 메서드
+    public void showProduct() {
+        List<Product> productList = selectCategory.getProductList();
 
-        System.out.println("[ " + category.getCategoryName() + " 카테고리 ]");
+        System.out.println("[ " + selectCategory.getCategoryName() + " 카테고리 ]");
         for (int i = 0; i < productList.size(); i++) {
             System.out.printf("%d. %-15s | %,10d원 | %s\n",
                     (i + 1),
@@ -91,12 +105,41 @@ public class CommerceSystem {
         System.out.println("0. 뒤로가기");
     }
 
-    // 카테고리 선택 유효성 검사
-    public boolean validateChoice(int value, int maxSize) {
-        if (value < 0 || value > maxSize) {
-            System.out.println("잘못입력하셨습니다 다시입력해주세요.");
-            return false;
+    // 선택한 카테고리 반환 메서드
+    public String processCategorySelection(int value) {
+        // 0이면 프로그램 종료
+        if (value == 0) {
+            System.out.println("프로그램 종료🛑");
+            return "exit";
+        } else if (value > 0 && value <= categoryList.size()) { // 카테고리 객체 반환
+            this.selectCategory = categoryList.get(value - 1);
+            return "category";
+        } else {
+            System.out.println("잘못된 값을 입력하셨습니다 다시 입력해주세요.❌"); // 잘못 입력 처리
+            return "wrong";
         }
-        return true;
+    }
+
+    // 선택한 상품 출력 메서드
+    public String processProductSelection(int value) {
+
+        List<Product> productList = this.selectCategory.getProductList();
+
+        if (value == 0) {
+            System.out.println("메인 화면으로 돌아갑니다");
+            return "back";
+        } else if (value > 0 && value <= productList.size()) {
+            this.selectProduct = productList.get(value - 1); // Product 객체 반환
+            return "product";
+        } else {
+            System.out.println("잘못된 상품번호를 입력하셨습니다 다시 입력해주세요.❌"); // 잘못 입력 처리
+        }
+        return "wrong";
+    }
+
+    // 입력 받기
+    public int enterNumber() {
+        System.out.print("입력 👉 ");
+        return sc.nextInt();
     }
 }
