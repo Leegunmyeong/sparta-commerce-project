@@ -21,7 +21,6 @@ public class CommerceSystem {
 
 
     //기능
-    /*  1단계 = */
 
     public void start() {
         while (true) {
@@ -76,10 +75,10 @@ public class CommerceSystem {
     }
 
 
-    // 기능
+
 
     // 카테고리 목록 출력 메서드
-    public void showCategory() {
+    private void showCategory() {
         System.out.println("[ 실시간 커머스 플랫폼 메인 ]");
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.printf("%d. %s\n", (
@@ -91,7 +90,7 @@ public class CommerceSystem {
 
 
     // 상품 목록 출력 메서드
-    public void showProduct() {
+    private void showProduct() {
         List<Product> productList = selectCategory.getProductList();
 
         System.out.println("[ " + selectCategory.getCategoryName() + " 카테고리 ]");
@@ -106,7 +105,7 @@ public class CommerceSystem {
     }
 
     // 선택한 카테고리 반환 메서드
-    public String processCategorySelection(int value) {
+    private String processCategorySelection(int value) {
         // 0이면 프로그램 종료
         if (value == 0) {
             System.out.println("프로그램 종료🛑");
@@ -121,7 +120,7 @@ public class CommerceSystem {
     }
 
     // 선택한 상품 출력 메서드
-    public String processProductSelection(int value) {
+    private String processProductSelection(int value) {
 
         List<Product> productList = this.selectCategory.getProductList();
 
@@ -138,7 +137,7 @@ public class CommerceSystem {
     }
 
     // 입력 받기
-    public int enterNumber() {
+    private int enterNumber() {
         System.out.print("입력 👉 ");
         return sc.nextInt();
     }
